@@ -1,4 +1,10 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useFetch } from '@/composables/useFetch'
+const { data: experiences, loading, error } = useFetch('http://localhost:8000/api/experiences')
+
+const pastels = ['pill-sand', 'pill-sage', 'pill-blue']
+</script>
+
 <template>
   <section class="section">
     <div class="section-head">
@@ -6,45 +12,19 @@
       <span class="meta">Depuis 2022</span>
     </div>
 
-    <div class="section-body">
-      <div class="experience-body">
+    <div v-if="loading">Chargement…</div>
+    <div v-else-if="error">Impossible de charger le parcours.</div>
+    <div v-else class="section-body">
+      <div v-for="(exp, i) in experiences" :key="exp.id" class="experience-body">
         <div>
-          <div class="date">2025 - 2027</div>
-          <span class="entreprise-pill pill-sand">DGA</span>
+          <div class="date">{{ exp.date }}</div>
+          <span class="entreprise-pill" :class="pastels[i % pastels.length]">{{
+            exp.entreprise
+          }}</span>
         </div>
         <div>
-          <h3>Développeur web full-stack en apprentissage</h3>
-          <p class="description">
-            Continuation mon apprentissage en alternance au sein de la DGA avec à la clé la
-            validation d'un titre RNCP d'Expert en développement full-stack (Niv.7)
-          </p>
-        </div>
-      </div>
-      <div class="experience-body">
-        <div>
-          <div class="date">2023 - 2025</div>
-          <span class="entreprise-pill pill-sage">DGA</span>
-        </div>
-        <div>
-          <h3>Développeur web full-stack en apprentissage</h3>
-          <p class="description">
-            Développement full-stack à travers des projets concrets, en équipe et en solo en
-            alternance au sein de la DGA, suivi d'une validation d'un titre RNCP de Développeur
-            Concepteur d'Applications (Niv.6)
-          </p>
-        </div>
-      </div>
-      <div class="experience-body">
-        <div>
-          <div class="date">2022 - 2023</div>
-          <span class="entreprise-pill pill-blue">Bootcamp / École</span>
-        </div>
-        <div>
-          <h3>Formation développeur web & web mobile</h3>
-          <p class="description">
-            Début de l'apprentissage du développement informatique par autoformation sur
-            FreeCodeCamp et Codecademy, suivi d'un BootCamp sur Marseille.
-          </p>
+          <h3>{{ exp.titre }}</h3>
+          <p class="description">{{ exp.description }}</p>
         </div>
       </div>
     </div>
