@@ -2,7 +2,7 @@
 <template>
   <section class="section">
     <div class="section-head">
-      <h2>Stack Technique</h2>
+      <h2>Stack technique</h2>
       <span class="meta">Au quotidien</span>
     </div>
     <div class="skills">
