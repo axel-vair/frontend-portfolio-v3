@@ -1,4 +1,4 @@
-import type { Tag } from '@/types/tags.ts'
+import type { Tag } from '@/types/tag.ts'
 
 export type Project = {
   id: number

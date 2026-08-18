@@ -1,30 +1,16 @@
 <script setup lang="ts">
+import { getProjects } from '@/services/project.ts'
 import { computed, ref } from 'vue'
-import { useFetch } from '@/composables/useFetch'
 
-type Tag = { nom: string }
-type Projet = {
-  id: number
-  nom: string
-  description: string
-  lien: string
-  image: string
-  tags: Tag[]
-}
-
-const {
-  data: projets,
-  loading,
-  error,
-  execute,
-} = useFetch<Projet>('http://localhost:8000/api/projets')
+const { data: projects, loading, error, execute } = getProjects()
 
 /* Pagination */
 const pageSize = 4
 const page = ref(0)
-const pageCount = computed(() => Math.ceil(projets.value.length / pageSize))
+const pageCount = computed(() => Math.ceil((projects.value?.length ?? 0) / pageSize))
 const visibles = computed(() =>
-  projets.value.slice(page.value * pageSize, (page.value + 1) * pageSize),
+  projects.value?.slice(
+    page.value * pageSize, (page.value + 1) * pageSize) ?? [],
 )
 const goTo = (n: number) => {
   page.value = n
@@ -43,7 +29,7 @@ const pastels = ['card-terracotta', 'card-sand', 'card-sage', 'card-blue']
   <section class="section">
     <div class="section-head">
       <h2>Projets</h2>
-      <span class="meta">{{ projets.length }} projets</span>
+      <span class="meta">{{ projects?.length}} projets</span>
     </div>
 
     <!-- Chargement -->
