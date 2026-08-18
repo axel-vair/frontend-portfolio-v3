@@ -1,18 +1,21 @@
 import { ref, onMounted } from 'vue'
-import axios from 'axios'
+import axios, { type AxiosRequestConfig } from 'axios'
 
-export const useFetch = (url, config = {}) => {
-  const data = ref([])
-  const error = ref(null)
+export const useFetch = <T>(url: string, config: AxiosRequestConfig = {}) => {
+  const data = ref<T | null>()
+  const error = ref<unknown>(null)
   const loading = ref(true)
 
   const execute = async () => {
     loading.value = true
     error.value = null
     try {
-      const result = await axios.request({
+      const result = await axios.request<T>({
         url,
-        headers: { Accept: 'application/json', ...config.headers },
+        headers: {
+          Accept: 'application/json',
+          ...config.headers,
+        },
         ...config,
       })
       data.value = result.data

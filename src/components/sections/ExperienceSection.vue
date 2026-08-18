@@ -1,21 +1,7 @@
 <script setup lang="ts">
-import { useFetch } from '@/composables/useFetch'
+import { getExperiences } from '@/services/experience'
 
-type Experience = {
-  id: number
-  date: string
-  entreprise: string
-  titre: string
-  description: string
-}
-
-const {
-  data: experiences,
-  loading,
-  error,
-  execute,
-} = useFetch<Experience>('http://localhost:8000/api/experiences')
-
+const { data: experiences, loading, error, execute } = getExperiences()
 const pastels = ['pill-sand', 'pill-sage', 'pill-blue']
 </script>
 
