@@ -22,12 +22,12 @@ const next = () => {
   page.value = Math.min(pageCount.value - 1, page.value + 1)
 }
 
-const pastels: [string, string, string, string] = [
+const pastels = [
   'card-terracotta',
   'card-sand',
   'card-sage',
   'card-blue',
-]
+] as const
 </script>
 
 <template>
