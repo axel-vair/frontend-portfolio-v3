@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { getProjects } from '@/services/project.ts'
 import { computed, ref } from 'vue'
+import ProjectCardSkeleton from '@/features/projects/components/ProjectCardSkeleton.vue'
+import ProjectCard from '@/features/projects/components/ProjectCard.vue'
 
 const { data: projects, loading, error, execute } = getProjects()
-
 /* Pagination */
 const pageSize = 4
 const page = ref(0)
 const pageCount = computed(() => Math.ceil((projects.value?.length ?? 0) / pageSize))
-const visibles = computed(() =>
-  projects.value?.slice(
-    page.value * pageSize, (page.value + 1) * pageSize) ?? [],
+const visibles = computed(
+  () => projects.value?.slice(page.value * pageSize, (page.value + 1) * pageSize) ?? [],
 )
 const goTo = (n: number) => {
   page.value = n
@@ -22,33 +22,24 @@ const next = () => {
   page.value = Math.min(pageCount.value - 1, page.value + 1)
 }
 
-const pastels = ['card-terracotta', 'card-sand', 'card-sage', 'card-blue']
+const pastels: [string, string, string, string] = [
+  'card-terracotta',
+  'card-sand',
+  'card-sage',
+  'card-blue',
+]
 </script>
 
 <template>
   <section class="section">
     <div class="section-head">
       <h2>Projets</h2>
-      <span class="meta">{{ projects?.length}} projets</span>
+      <span class="meta">{{ projects?.length }} projets</span>
     </div>
 
     <!-- Chargement -->
     <div v-if="loading" class="project-container">
-      <div v-for="n in 4" :key="n" class="skeleton-card">
-        <div class="skeleton-img">
-          <span class="sk sk-img"></span>
-        </div>
-        <div class="skeleton-body">
-          <span class="sk sk-title"></span>
-          <span class="sk sk-text"></span>
-          <span class="sk sk-text-short"></span>
-          <div class="skeleton-tags">
-            <span class="sk sk-tag"></span>
-            <span class="sk sk-tag"></span>
-            <span class="sk sk-tag"></span>
-          </div>
-        </div>
-      </div>
+      <ProjectCardSkeleton v-for="n in 4" :key="n" />
     </div>
 
     <!-- Erreur -->
@@ -66,26 +57,12 @@ const pastels = ['card-terracotta', 'card-sand', 'card-sage', 'card-blue']
     <!-- Contenu -->
     <template v-else>
       <div class="project-container">
-        <article
-          v-for="(projet, i) in visibles"
-          :key="projet.id"
-          class="project"
-          :class="pastels[(page * pageSize + i) % pastels.length]"
-        >
-          <div class="project-img">
-            <img v-if="projet.image" :src="projet.image" :alt="projet.nom" />
-            <div v-else class="project-img-empty">{{ projet.nom }}</div>
-          </div>
-          <div class="project-body">
-            <h3 class="project-title">{{ projet.nom }}</h3>
-            <p class="project-description">{{ projet.description }}</p>
-            <div class="container-tags">
-              <span v-for="tag in projet.tags" :key="tag.nom" class="project-tag">
-                {{ tag.nom }}
-              </span>
-            </div>
-          </div>
-        </article>
+        <ProjectCard
+          v-for="(project, i) in visibles"
+          :key="project.id"
+          :project="project"
+          :pastel="pastels[(page * pageSize + i) % pastels.length] ?? pastels[0]"
+        />
       </div>
 
       <div v-if="pageCount > 1" class="pagination">
@@ -113,154 +90,6 @@ const pastels = ['card-terracotta', 'card-sand', 'card-sage', 'card-blue']
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 22px;
-}
-
-/* Carte */
-.project {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-  transition:
-    transform 0.35s var(--ease),
-    box-shadow 0.35s;
-}
-
-.project:hover {
-  transform: translateY(-4px);
-  box-shadow: var(--shadow-card);
-}
-
-.project-img {
-  padding: 24px 24px 0;
-}
-
-.project-img img {
-  display: block;
-  width: 100%;
-  height: 250px;
-  object-fit: cover;
-  border-radius: 16px;
-}
-
-.project-img-empty {
-  height: 250px;
-  border-radius: 16px;
-  background: #ffffff80;
-  border: 1px dashed #1c1b1833;
-  display: grid;
-  place-items: center;
-  font-family: var(--font-display);
-  font-size: 18px;
-  color: var(--text-faint);
-  text-align: center;
-  padding: 0 20px;
-}
-
-.project-body {
-  padding: 22px 26px 28px;
-}
-
-.project-title {
-  font-family: var(--font-display);
-  font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.6px;
-  margin: 0 0 10px;
-}
-
-.project-description {
-  font-family: var(--font-body);
-  font-size: 15.5px;
-  line-height: 1.6;
-  color: var(--text-muted);
-  margin: 0 0 18px;
-}
-
-.container-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-
-.project-tag {
-  font-family: var(--font-body);
-  font-size: 12.5px;
-  font-weight: 600;
-  letter-spacing: 0.2px;
-  padding: 7px 14px;
-  border-radius: var(--radius-pill);
-  background: #ffffffcc;
-  box-shadow: 0 1px 2px #1c1b1810;
-}
-
-.card-terracotta {
-  background: var(--pastel-terracotta);
-}
-.card-sand {
-  background: var(--pastel-sand);
-}
-.card-sage {
-  background: var(--pastel-sage);
-}
-.card-blue {
-  background: var(--pastel-blue);
-}
-
-/* Chargement */
-.skeleton-card {
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  overflow: hidden;
-}
-
-.skeleton-img {
-  padding: 24px 24px 0;
-}
-
-.skeleton-body {
-  padding: 22px 26px 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.skeleton-tags {
-  display: flex;
-  gap: 8px;
-  margin-top: 8px;
-}
-
-.sk {
-  border-radius: var(--radius-pill);
-  animation: pulse 1.4s ease-in-out infinite;
-}
-
-.sk-img {
-  display: block;
-  width: 100%;
-  height: 250px;
-  border-radius: 16px;
-  background: var(--divider);
-}
-.sk-title {
-  width: 70%;
-  height: 26px;
-  background: var(--divider);
-}
-.sk-text {
-  width: 100%;
-  height: 14px;
-  background: #1c1b1810;
-}
-.sk-text-short {
-  width: 82%;
-  height: 14px;
-  background: #1c1b1810;
-}
-.sk-tag {
-  width: 74px;
-  height: 29px;
-  background: var(--divider);
 }
 
 @keyframes pulse {
@@ -368,12 +197,6 @@ const pastels = ['card-terracotta', 'card-sand', 'card-sage', 'card-blue']
 @media (max-width: 980px) {
   .project-container {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .sk {
-    animation: none;
   }
 }
 </style>
