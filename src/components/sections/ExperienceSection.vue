@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { getExperiences } from '@/services/experience'
+import ExperienceItem from '@/features/experience/components/ExperienceItem.vue'
+import ExperienceSkeletonItem from '@/features/experience/components/ExperienceSkeletonItem.vue'
 
 const { data: experiences, loading, error, execute } = getExperiences()
-const pastels = ['pill-sand', 'pill-sage', 'pill-blue']
+const pastels = ['pill-sand', 'pill-sage', 'pill-blue'] as const
 </script>
 
 <template>
@@ -14,17 +16,7 @@ const pastels = ['pill-sand', 'pill-sage', 'pill-blue']
 
     <!-- Chargement -->
     <div v-if="loading">
-      <div v-for="n in 3" :key="n" class="skeleton-row">
-        <div class="skeleton-left">
-          <span class="sk sk-date"></span>
-          <span class="sk sk-badge"></span>
-        </div>
-        <div class="skeleton-right">
-          <span class="sk sk-title"></span>
-          <span class="sk sk-text"></span>
-          <span class="sk sk-text-short"></span>
-        </div>
-      </div>
+      <ExperienceSkeletonItem v-for="n in 3" :key="n"/>
     </div>
 
     <!-- Erreur -->
@@ -41,18 +33,12 @@ const pastels = ['pill-sand', 'pill-sage', 'pill-blue']
 
     <!-- Contenu -->
     <div v-else class="section-body">
-      <div v-for="(exp, i) in experiences" :key="exp.id" class="experience-body">
-        <div>
-          <div class="date">{{ exp.date }}</div>
-          <span class="entreprise-pill" :class="pastels[i % pastels.length]">
-            {{ exp.entreprise }}
-          </span>
-        </div>
-        <div>
-          <h3>{{ exp.titre }}</h3>
-          <p class="description">{{ exp.description }}</p>
-        </div>
-      </div>
+      <ExperienceItem
+        v-for="(experience, i) in experiences"
+        :key="experience.id"
+        :experience="experience"
+        :pastel="pastels[i % pastels.length] ?? pastels[0]"
+      />
     </div>
   </section>
 </template>
@@ -62,112 +48,12 @@ const pastels = ['pill-sand', 'pill-sage', 'pill-blue']
   padding: 70px 0;
 }
 
-/* Étape */
-.experience-body {
-  display: grid;
-  grid-template-columns: 210px 1fr;
-  gap: 40px;
-  align-items: start;
-  padding: 30px 0;
-  border-top: 1px solid var(--divider);
-}
-
-.date {
-  font-family: var(--font-display);
-  font-size: 22px;
-  font-weight: 700;
-  letter-spacing: -0.4px;
-  margin-bottom: 8px;
-}
-
-.entreprise-pill {
-  display: inline-block;
-  font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 600;
-  padding: 5px 13px;
-  border-radius: var(--radius-pill);
-  color: var(--text);
-}
-
-.pill-sand {
-  background: var(--pastel-sand);
-}
-.pill-sage {
-  background: var(--pastel-sage);
-}
-.pill-blue {
-  background: var(--pastel-blue);
-}
-
 h3 {
   font-family: var(--font-display);
   font-size: 24px;
   font-weight: 700;
   letter-spacing: -0.5px;
   margin: 0 0 10px;
-}
-
-.description {
-  font-family: var(--font-body);
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.7;
-  color: var(--text-muted);
-  margin: 0;
-}
-
-/* Chargement */
-.skeleton-row {
-  display: grid;
-  grid-template-columns: 210px 1fr;
-  gap: 40px;
-  align-items: start;
-  padding: 30px 0;
-  border-top: 1px solid var(--divider);
-}
-
-.skeleton-left {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.skeleton-right {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.sk {
-  border-radius: var(--radius-pill);
-  animation: pulse 1.4s ease-in-out infinite;
-}
-
-.sk-date {
-  width: 140px;
-  height: 24px;
-  background: var(--divider);
-}
-.sk-badge {
-  width: 90px;
-  height: 25px;
-  background: var(--divider);
-}
-.sk-title {
-  width: 70%;
-  height: 26px;
-  background: var(--divider);
-}
-.sk-text {
-  width: 100%;
-  height: 14px;
-  background: #1c1b1810;
-}
-.sk-text-short {
-  width: 82%;
-  height: 14px;
-  background: #1c1b1810;
 }
 
 @keyframes pulse {
