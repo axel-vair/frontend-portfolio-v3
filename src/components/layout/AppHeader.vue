@@ -122,7 +122,7 @@ const { active } = useActiveSection(items.map((i) => i.id))
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 700;
-  padding: 9px 18px;
+  padding: 12px 20px;
   border-radius: var(--radius-pill);
   background: var(--text);
   color: var(--text-invert);
