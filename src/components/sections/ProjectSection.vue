@@ -1,33 +1,13 @@
 <script setup lang="ts">
 import { getProjects } from '@/services/project.ts'
-import { computed, ref } from 'vue'
 import ProjectCardSkeleton from '@/features/projects/components/ProjectCardSkeleton.vue'
 import ProjectCard from '@/features/projects/components/ProjectCard.vue'
+import { usePagination } from '@/composables/usePagination.ts'
 
 const { data: projects, loading, error, execute } = getProjects()
-/* Pagination */
-const pageSize = 4
-const page = ref(0)
-const pageCount = computed(() => Math.ceil((projects.value?.length ?? 0) / pageSize))
-const visibles = computed(
-  () => projects.value?.slice(page.value * pageSize, (page.value + 1) * pageSize) ?? [],
-)
-const goTo = (n: number) => {
-  page.value = n
-}
-const prev = () => {
-  page.value = Math.max(0, page.value - 1)
-}
-const next = () => {
-  page.value = Math.min(pageCount.value - 1, page.value + 1)
-}
+const { page, pageCount, visibles, offset, goTo, prev, next } = usePagination(projects, 4)
 
-const pastels = [
-  'card-terracotta',
-  'card-sand',
-  'card-sage',
-  'card-blue',
-] as const
+const pastels = ['card-terracotta', 'card-sand', 'card-sage', 'card-blue'] as const
 </script>
 
 <template>
@@ -61,7 +41,7 @@ const pastels = [
           v-for="(project, i) in visibles"
           :key="project.id"
           :project="project"
-          :pastel="pastels[(page * pageSize + i) % pastels.length] ?? pastels[0]"
+          :pastel="pastels[(offset + i) % pastels.length] ?? pastels[0]"
         />
       </div>
 
