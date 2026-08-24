@@ -1,8 +1,8 @@
 <script setup lang="ts"></script>
 <template>
-<!-- Hero Section -->
+  <!-- Hero Section -->
   <section class="column">
-<!--    Hero Info -->
+    <!--    Hero Info -->
     <div>
       <div class="pill">
         <span class="pill-dot"></span>
@@ -21,7 +21,7 @@
         <a class="btn btn-secondary">Mon CV</a>
       </div>
     </div>
-<!-- Hero Terminal -->
+    <!-- Hero Terminal -->
     <div class="terminal">
       <div class="terminal-title">
         <div class="dots">
@@ -88,6 +88,7 @@
   height: 8px;
   border-radius: 50%;
   background: var(--dot-green);
+  animation: breathe 2.4s ease-in-out infinite;
 }
 
 /* Terminal card */
@@ -210,6 +211,36 @@
 @media (max-width: 980px) {
   .column {
     grid-template-columns: 1fr;
+  }
+}
+
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pill-dot {
+    animation: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .column {
+    gap: 32px;
+    padding: 32px 0 48px;
+  }
+  .title-hero {
+    letter-spacing: -1px;
+  }
+  .code-body {
+    font-size: 12px;
+    padding: 20px 18px;
   }
 }
 </style>

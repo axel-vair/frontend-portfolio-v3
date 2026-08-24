@@ -9,7 +9,7 @@ defineProps<{
 
 <template>
   <div class="experience-body">
-    <div>
+    <div class="container-info">
       <div class="date">{{ experience.date }}</div>
       <span class="entreprise-pill" :class="pastel">
         {{ experience.entreprise }}
@@ -66,5 +66,37 @@ defineProps<{
   line-height: 1.7;
   color: var(--text-muted);
   margin: 0;
+}
+@media (max-width: 980px) {
+  .experience-body {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .container-info {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .date {
+    margin-bottom: 0;
+  }
+
+  h3 {
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 640px) {
+  .date {
+    font-size: 19px;
+  }
+  h3 {
+    font-size: 21px;
+  }
+  .description {
+    font-size: 15px;
+  }
 }
 </style>

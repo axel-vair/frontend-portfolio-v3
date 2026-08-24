@@ -1,3 +1,22 @@
+<script setup lang="ts">
+import { useActiveSection } from '@/composables/useActiveSection'
+
+type NavItem = {
+  id: string
+  label: string
+  pill: string
+}
+
+const items: NavItem[] = [
+  { id: 'projets', label: 'Projets', pill: 'var(--pastel-terracotta)' },
+  { id: 'stack', label: 'Stack', pill: 'var(--pastel-sage)' },
+  { id: 'parcours', label: 'Parcours', pill: 'var(--pastel-blue)' },
+  { id: 'articles', label: 'Articles', pill: 'var(--pastel-sand)' },
+]
+
+const { active } = useActiveSection(items.map((i) => i.id))
+</script>
+
 <template>
   <header class="header">
     <div class="brand">
@@ -17,46 +36,11 @@
       >
         {{ item.label }}
       </a>
-      <a href="#contact" class="contact">Contact</a>
     </nav>
+
+    <a href="#contact" class="contact">Contact</a>
   </header>
 </template>
-
-<script setup lang="ts">
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-
-type NavItem = {
-  id: string
-  label: string
-  pill: string
-}
-const items: NavItem[] = [
-  { id: 'projets', label: 'Projets', pill: '#f0d7cb' },
-  { id: 'stack', label: 'Stack', pill: '#e6ebe0' },
-  { id: 'parcours', label: 'Parcours', pill: '#e2e7f0' },
-  { id: 'articles', label: 'Articles', pill: '#f2e6cd' },
-]
-
-const active = ref<string>('projets')
-
-function onScroll() {
-  let current: string = items[0]!.id
-  for (const item of items) {
-    const element = document.getElementById(item.id)
-    if (element && element.getBoundingClientRect().top <= 140) current = item.id
-  }
-  active.value = current
-}
-
-onMounted(() => {
-  window.addEventListener('scroll', onScroll, { passive: true })
-  onScroll()
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', onScroll)
-})
-</script>
 
 <style scoped>
 .header {
@@ -80,7 +64,7 @@ onBeforeUnmount(() => {
 .logo-mark {
   width: 36px;
   height: 36px;
-  background: #1c1b18;
+  background: var(--text);
   border-radius: 11px;
   display: flex;
   align-items: center;
@@ -92,12 +76,12 @@ onBeforeUnmount(() => {
   height: 0;
   border-left: 8px solid transparent;
   border-right: 8px solid transparent;
-  border-bottom: 13px solid #f7f5f0;
+  border-bottom: 13px solid var(--bg);
   margin-top: 1px;
 }
 
 .logo-name {
-  font-family: 'Bricolage Grotesque', sans-serif;
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 18px;
 }
@@ -106,19 +90,20 @@ onBeforeUnmount(() => {
   display: flex;
   align-items: center;
   gap: 4px;
-  background: #ffffff;
-  border: 1px solid #1c1b1814;
+  background: var(--surface);
+  border: 1px solid var(--border);
   padding: 6px;
-  border-radius: 100px;
+  border-radius: var(--radius-pill);
 }
 
 .nav a {
   --pill: transparent;
+  font-family: var(--font-body);
   font-size: 14px;
   font-weight: 600;
   padding: 9px 17px;
-  border-radius: 100px;
-  color: #1c1b18;
+  border-radius: var(--radius-pill);
+  color: var(--text);
   background: transparent;
   text-decoration: none;
   transition:
@@ -128,28 +113,57 @@ onBeforeUnmount(() => {
 
 .nav a.is-active {
   background: var(--pill);
-  box-shadow: inset 0 0 0 1px #1c1b1818;
+  box-shadow: inset 0 0 0 1px var(--divider);
 }
 
-.nav a.contact {
+.contact {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-size: 14px;
   font-weight: 700;
   padding: 9px 18px;
-  background: #1c1b18;
-  color: #f7f5f0;
+  border-radius: var(--radius-pill);
+  background: var(--text);
+  color: var(--text-invert);
+  transition: transform 0.3s var(--ease);
+}
+
+.contact:hover {
+  transform: translateY(-2px);
+  opacity: 1;
 }
 
 @media (max-width: 980px) {
   .header {
-    flex-wrap: wrap;
-    gap: 14px;
+    padding: 16px 0;
+    backdrop-filter: none;
+    background: var(--bg);
   }
+
   .nav {
-    overflow-x: auto;
-    max-width: 100%;
-    -webkit-overflow-scrolling: touch;
+    position: fixed;
+    bottom: 16px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 420px;
+    justify-content: space-between;
+    gap: 2px;
+    padding: 5px;
+    box-shadow: 0 10px 30px -12px #1c1b1840;
   }
+
   .nav a {
+    flex: 1;
+    text-align: center;
+    padding: 10px 8px;
+    font-size: 13px;
     white-space: nowrap;
+  }
+
+  .contact {
+    font-size: 13px;
   }
 }
 </style>
