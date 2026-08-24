@@ -1,13 +1,28 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { computed } from 'vue'
+import type { Article } from '@/types/article.ts'
+
+const props = defineProps<{
+  article: Article
+  pastel: string
+}>()
+
+const dateFormated = computed(() =>
+  new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'numeric', year: 'numeric' }).format(
+    new Date(props.article.datePublication),
+  ),
+)
+</script>
+
 <template>
   <article class="article">
-    <div class="banner"></div>
+    <div class="banner" :class="pastel"></div>
     <div class="body">
       <div class="meta">
-        <span class="date-pill">Pill</span>
+        <span class="date-pill" :class="pastel">{{ dateFormated }}</span>
       </div>
-      <h3>Titre</h3>
-      <p class="description">Description</p>
+      <h3>{{ article.titre }}</h3>
+      <p class="description">{{ article.contenu }}</p>
       <a class="article-link">Lire l'article</a>
     </div>
   </article>
@@ -19,11 +34,11 @@
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
+  overflow: hidden;
+  cursor: pointer;
   transition:
     transform 0.35s var(--ease),
     box-shadow 0.35s;
-  overflow: hidden;
-  cursor: pointer;
 }
 
 .article:hover {
@@ -33,7 +48,6 @@
 
 .banner {
   height: 8px;
-  background: var(--pastel-terracotta);
 }
 
 .body {
@@ -53,13 +67,6 @@
   font-weight: 600;
   border-radius: var(--radius-pill);
   padding: 5px 12px;
-  background-color: var(--pastel-terracotta);
-}
-
-.read-time {
-  font-family: var(--font-body);
-  font-size: 12.5px;
-  color: var(--text-faint);
 }
 
 h3 {
@@ -67,11 +74,14 @@ h3 {
   font-size: 22px;
   font-weight: 700;
   line-height: 1.2;
+  letter-spacing: -0.5px;
   margin: 0 0 12px;
 }
 
 .description {
   font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.6;
   color: var(--text-muted);
   margin: 0 0 20px;
 }
@@ -83,5 +93,18 @@ h3 {
   font-weight: 600;
   color: var(--accent);
   cursor: pointer;
+}
+
+.card-terracotta {
+  background: var(--pastel-terracotta);
+}
+.card-sage {
+  background: var(--pastel-sage);
+}
+.card-blue {
+  background: var(--pastel-blue);
+}
+.card-sand {
+  background: var(--pastel-sand);
 }
 </style>
