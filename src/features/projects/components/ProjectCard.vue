@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { Project } from '@/types/project'
-
+import { resolveMediaUrl } from '@/utils/media.ts'
 
 defineProps<{
   project: Project
@@ -11,7 +11,11 @@ defineProps<{
 <template>
   <article class="project" :class="pastel">
     <div class="project-img">
-      <img v-if="project.image" :src="project.image" :alt="project.nom" />
+      <img
+        v-if="project.image"
+        :src="resolveMediaUrl(project.image.contentUrl)"
+        :alt="project.nom"
+      />
       <div v-else class="project-img-empty">{{ project.nom }}</div>
     </div>
     <div class="project-body">
@@ -34,6 +38,7 @@ defineProps<{
   transition:
     transform 0.35s var(--ease),
     box-shadow 0.35s;
+  cursor: pointer;
 }
 
 .project:hover {

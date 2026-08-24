@@ -5,6 +5,9 @@ export type Project = {
   nom: string
   description: string
   lien: string
-  image: string
+  image?: {
+    '@id': string
+    contentUrl: string
+  } | null
   tags: Tag[]
 }
