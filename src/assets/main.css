@@ -73,7 +73,9 @@ a:hover { opacity: 0.75; }
 section[id] { scroll-margin-top: var(--header-offset); }
 html { scroll-behavior: smooth; }
 
-/* ===== Titres de section ===== */
+/* Section */
+.section { padding: var(--section-gap) 0; }
+
 .section-head {
   display: flex;
   justify-content: space-between;
@@ -89,6 +91,23 @@ html { scroll-behavior: smooth; }
 }
 .section-head .meta { font-size: 14px; color: var(--text-faint); }
 
+/* Boutons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 15px 26px;
+  border-radius: var(--radius-pill);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: opacity 0.25s;
+}
+.btn:hover { opacity: 0.75; }
+.btn-primary { background: var(--text); color: var(--text-invert); border: none; }
+.btn-secondary { background: transparent; color: var(--text); border: 1px solid var(--border-strong); }
+
 /* ===== Animations ===== */
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(16px); }
@@ -98,7 +117,39 @@ html { scroll-behavior: smooth; }
 [data-reveal] { opacity: 0; }
 [data-reveal='in'] { animation: fadeUp 0.7s var(--ease) forwards; }
 
+/* Squelettes */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+.sk { border-radius: var(--radius-pill); animation: pulse 1.4s ease-in-out infinite; }
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   [data-reveal] { opacity: 1 !important; animation: none !important; }
+  .sk { animation: none; }
+}
+
+@media (max-width: 980px) {
+  body { padding-bottom: 88px; }
+}
+
+@media (max-width: 640px) {
+  :root {
+    --page-pad: 20px;
+    --section-gap: 48px;
+    --header-offset: 90px;
+  }
+
+  .section-head {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    margin-bottom: 24px;
+  }
+
+  .section-head h2 {
+    font-size: 28px;
+    letter-spacing: -0.6px;
+  }
 }

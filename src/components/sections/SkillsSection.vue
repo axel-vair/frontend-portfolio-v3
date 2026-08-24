@@ -1,11 +1,13 @@
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import ArticleCard from '@/features/articles/components/ArticleCard.vue'
+</script>
 <template>
-  <section class="section">
+  <section id="stack" class="section">
     <div class="section-head">
       <h2>Stack technique</h2>
       <span class="meta">Au quotidien</span>
     </div>
-    <div class="skills">
+    <div class="skills" v-reveal>
       <span class="pill-skills">Symfony</span>
       <span class="pill-skills">PHP</span>
       <span class="pill-skills">VueJs</span>
@@ -24,10 +26,6 @@
 </template>
 
 <style scoped>
-.section {
-  padding: 70px 0;
-}
-
 .skills {
   display: flex;
   flex-wrap: wrap;
@@ -53,5 +51,14 @@
 
 .pill-skills:hover {
   transform: translateY(-3px);
+}
+@media (max-width: 640px) {
+  .skills {
+    padding: 24px;
+    gap: 8px;
+  }
+  .pill-skills {
+    padding: 7px 16px;
+  }
 }
 </style>

@@ -1,15 +1,27 @@
 <script setup lang="ts"></script>
 
 <template>
-  <section class="section">
+  <section id="contact" class="section" v-reveal>
     <h2 class="title">Parlons de votre projet</h2>
     <p class="description">
       Ouvert à toute opportunité, premier poste de développeur, mission de freelance.
     </p>
     <div class="actions">
       <a href="mailto:contact@axelvair.fr" class="btn btn-primary">contact@axelvair.fr</a>
-      <a href="https://linkedin.com/in/axel-vair" target="_blank" class="btn btn-secondary">LinkedIn</a>
-      <a href="https://github.com/axel-vair" target="_blank" class="btn btn-secondary">GitHub</a>
+      <a
+        href="https://linkedin.com/in/axel-vair"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-secondary"
+        >LinkedIn</a
+      >
+      <a
+        href="https://github.com/axel-vair"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-secondary"
+        >GitHub</a
+      >
     </div>
   </section>
 </template>
@@ -32,6 +44,12 @@
   margin: 0 0 20px;
 }
 
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
 .description {
   max-width: 520px;
   font-family: var(--font-body);
@@ -40,18 +58,6 @@
   color: var(--text-muted);
   line-height: 1.6;
   margin: 0 0 34px;
-}
-
-.actions {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  transition: opacity 0.25s;
 }
 
 .btn:hover {
@@ -76,5 +82,18 @@
   font-family: var(--font-body);
   font-size: 15px;
   font-weight: 600;
+}
+
+@media (max-width: 640px) {
+  .section {
+    padding: 40px 24px;
+    margin: 48px 0 32px;
+  }
+  .title {
+    letter-spacing: -1px;
+  }
+  .description {
+    font-size: 16px;
+  }
 }
 </style>

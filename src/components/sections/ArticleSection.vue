@@ -4,6 +4,7 @@ import ArticleCardSkeleton from '@/features/articles/components/ArticleCardSkele
 import PaginationUi from '@/components/ui/pagination-ui.vue'
 import { getArticles } from '@/services/article.ts'
 import { usePagination } from '@/composables/usePagination.ts'
+import ErrorState from '@/components/ui/error-state.vue'
 
 const { data: articles, loading, error, execute } = getArticles()
 const { page, pageCount, visibles, offset, goTo, prev, next } = usePagination(articles, 3)
@@ -12,7 +13,7 @@ const pastels = ['card-terracotta', 'card-sage', 'card-blue'] as const
 </script>
 
 <template>
-  <section class="section">
+  <section id="articles" class="section">
     <div class="section-head">
       <h2>Articles</h2>
       <span class="meta">{{ articles?.length ?? 0 }} articles</span>
@@ -24,16 +25,7 @@ const pastels = ['card-terracotta', 'card-sage', 'card-blue'] as const
     </div>
 
     <!-- Erreur -->
-    <div v-else-if="error" class="state-error">
-      <div class="state-error-head">
-        <span class="state-dot"></span>
-        Impossible de charger les articles
-      </div>
-      <p class="state-error-text">
-        Le serveur n'a pas répondu. Vérifiez votre connexion, ou réessayez dans un instant.
-      </p>
-      <button class="btn btn-secondary" @click="execute">Réessayer</button>
-    </div>
+    <ErrorState v-else-if="error" title="Impossible de charger les articles" @retry="execute" />
 
     <!-- Contenu -->
     <template v-else>
@@ -41,12 +33,14 @@ const pastels = ['card-terracotta', 'card-sage', 'card-blue'] as const
         <ArticleCard
           v-for="(article, i) in visibles"
           :key="article.id"
+          v-reveal
           :article="article"
           :pastel="pastels[(offset + i) % pastels.length] ?? pastels[0]"
         />
       </div>
 
-      <pagination-ui :page="page" :page-count="pageCount" @prev="prev" @go-to="goTo" @next="next" />
+      <!-- Pagination -->
+      <PaginationUi :page="page" :page-count="pageCount" @prev="prev" @go-to="goTo" @next="next" />
     </template>
   </section>
 </template>
