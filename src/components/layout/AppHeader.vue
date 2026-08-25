@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { useActiveSection } from '@/composables/useActiveSection'
+import { useRoute } from 'vue-router'
+import { computed } from 'vue'
 
 type NavItem = {
   id: string
@@ -13,32 +15,38 @@ const items: NavItem[] = [
   { id: 'parcours', label: 'Parcours', pill: 'var(--pastel-blue)' },
   { id: 'articles', label: 'Articles', pill: 'var(--pastel-sand)' },
 ]
+const route = useRoute()
 
-const { active } = useActiveSection(items.map((i) => i.id))
+const { active: scrollActive } = useActiveSection(items.map((i) => i.id))
+
+const active = computed(() => {
+  if (route.name === 'article') return 'articles'
+  return scrollActive.value
+})
 </script>
 
 <template>
   <header class="header">
-    <div class="brand">
+    <RouterLink to="/" class="brand">
       <span class="logo-mark">
         <span class="logo-triangle"></span>
       </span>
       <span class="logo-name">Axel Vair</span>
-    </div>
+    </RouterLink>
 
     <nav class="nav">
-      <a
+      <RouterLink
         v-for="item in items"
         :key="item.id"
-        :href="`#${item.id}`"
+        :to="{ name: 'home', hash: `#${item.id}` }"
         :class="{ 'is-active': active === item.id }"
         :style="{ '--pill': item.pill }"
       >
         {{ item.label }}
-      </a>
+      </RouterLink>
     </nav>
 
-    <a href="#contact" class="contact">Contact</a>
+    <RouterLink :to="{ name: 'home', hash: '#contact' }" class="contact">Contact</RouterLink>
   </header>
 </template>
 

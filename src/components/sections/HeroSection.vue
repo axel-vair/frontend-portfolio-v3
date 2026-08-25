@@ -17,7 +17,7 @@
         testées, lisibles et pensées pour évoluer.
       </p>
       <div class="hero-actions">
-        <a  href="#projets" class="btn btn-primary">Voir mes projets</a>
+        <RouterLink  :to="{ name: 'home', hash: '#projets' }" class="btn btn-primary">Voir mes projets</RouterLink>
         <a class="btn btn-secondary">Mon CV</a>
       </div>
     </div>

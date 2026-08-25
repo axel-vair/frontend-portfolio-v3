@@ -40,6 +40,10 @@ defineProps<{
   margin-bottom: 8px;
 }
 
+h3 {
+  margin-top: 0;
+}
+
 .entreprise-pill {
   display: inline-block;
   font-family: var(--font-body);

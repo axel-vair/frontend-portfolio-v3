@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { Article } from '@/types/article.ts'
+import { getPastel } from '@/utils/pastels.ts'
 
-const props = defineProps<{
-  article: Article
-  pastel: string
-}>()
-
+const props = defineProps<{ article: Article }>()
+const pastel = computed(() => getPastel(props.article.id))
 const dateFormated = computed(() =>
   new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'numeric', year: 'numeric' }).format(
     new Date(props.article.datePublication),
@@ -22,8 +20,13 @@ const dateFormated = computed(() =>
         <span class="date-pill" :class="pastel">{{ dateFormated }}</span>
       </div>
       <h3>{{ article.titre }}</h3>
-      <p class="description">{{ article.contenu }}</p>
-      <a class="article-link">Lire l'article</a>
+      <p class="description">{{ article.chapeau }}</p>
+      <RouterLink
+        class="article-link"
+        :to="{ name: 'article', params: { id: article.id }}"
+      >
+        Lire l'article
+      </RouterLink>
     </div>
   </article>
 </template>
@@ -69,13 +72,14 @@ const dateFormated = computed(() =>
   padding: 5px 12px;
 }
 
-h3 {
+h1 {
   font-family: var(--font-display);
   font-size: 22px;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.5px;
   margin: 0 0 12px;
+  overflow-wrap: break-word;
 }
 
 .description {
