@@ -5,7 +5,6 @@ import ProjectCard from '@/features/projects/components/ProjectCard.vue'
 import { usePagination } from '@/composables/usePagination.ts'
 import PaginationUi from '@/components/ui/pagination-ui.vue'
 import ErrorState from '@/components/ui/error-state.vue'
-import ArticleCard from '@/features/articles/components/ArticleCard.vue'
 
 const { data: projects, loading, error, execute } = getProjects()
 const { page, pageCount, visibles, offset, goTo, prev, next } = usePagination(projects, 4)

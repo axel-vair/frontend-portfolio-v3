@@ -3,5 +3,6 @@ export type Article = {
   image: string
   datePublication: string
   titre: string
+  chapeau: string
   contenu: string
 }
