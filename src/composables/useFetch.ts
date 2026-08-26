@@ -1,7 +1,9 @@
-import { ref, onMounted } from 'vue'
+import { ref, type MaybeRefOrGetter, toValue, watchEffect } from 'vue'
 import axios, { type AxiosRequestConfig } from 'axios'
 
-export const useFetch = <T>(url: string, config: AxiosRequestConfig = {}) => {
+export const useFetch = <T>(
+  url: MaybeRefOrGetter<string>,
+  config: AxiosRequestConfig = {}) => {
   const data = ref<T | null>()
   const error = ref<unknown>(null)
   const loading = ref(true)
@@ -11,7 +13,7 @@ export const useFetch = <T>(url: string, config: AxiosRequestConfig = {}) => {
     error.value = null
     try {
       const result = await axios.request<T>({
-        url,
+        url: toValue(url),
         headers: {
           Accept: 'application/json',
           ...config.headers,
@@ -26,7 +28,7 @@ export const useFetch = <T>(url: string, config: AxiosRequestConfig = {}) => {
     }
   }
 
-  onMounted(execute)
+  watchEffect(execute)
 
   return { data, loading, error, execute }
 }
