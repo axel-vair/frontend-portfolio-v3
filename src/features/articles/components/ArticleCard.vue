@@ -4,6 +4,7 @@ import type { Article } from '@/types/article.ts'
 import { getPastel } from '@/utils/pastels.ts'
 
 const props = defineProps<{ article: Article }>()
+
 const pastel = computed(() => getPastel(props.article.id))
 const dateFormated = computed(() =>
   new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'numeric', year: 'numeric' }).format(
@@ -21,10 +22,7 @@ const dateFormated = computed(() =>
       </div>
       <h3>{{ article.titre }}</h3>
       <p class="description">{{ article.chapeau }}</p>
-      <RouterLink
-        class="article-link"
-        :to="{ name: 'article', params: { id: article.id }}"
-      >
+      <RouterLink class="article-link" :to="{ name: 'article', params: { id: article.id } }">
         Lire l'article
       </RouterLink>
     </div>
@@ -34,11 +32,13 @@ const dateFormated = computed(() =>
 <style scoped>
 .article {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  cursor: pointer;
   transition:
     transform 0.35s var(--ease),
     box-shadow 0.35s;
@@ -54,6 +54,9 @@ const dateFormated = computed(() =>
 }
 
 .body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
   padding: 26px 26px 28px;
 }
 
@@ -72,17 +75,25 @@ const dateFormated = computed(() =>
   padding: 5px 12px;
 }
 
-h1 {
+h3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   font-family: var(--font-display);
   font-size: 22px;
   font-weight: 700;
   line-height: 1.2;
   letter-spacing: -0.5px;
+  overflow-wrap: anywhere;
   margin: 0 0 12px;
-  overflow-wrap: break-word;
 }
 
 .description {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   font-family: var(--font-body);
   font-size: 15px;
   line-height: 1.6;
@@ -91,12 +102,18 @@ h1 {
 }
 
 .article-link {
-  display: inline-flex;
+  align-self: flex-start;
+  margin-top: auto;
   font-family: var(--font-body);
   font-size: 14px;
   font-weight: 600;
   color: var(--accent);
-  cursor: pointer;
+}
+
+.article-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
 }
 
 .card-terracotta {
