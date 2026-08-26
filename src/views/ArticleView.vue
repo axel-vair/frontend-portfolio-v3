@@ -9,7 +9,7 @@ import { getPastel } from '@/utils/pastels.ts'
 
 const props = defineProps<{ id: string }>()
 
-const { data: article, loading, error } = getArticle(props.id)
+const { data: article, loading, error } = getArticle(() => props.id)
 const { data: articles } = getArticles()
 
 const pastel = computed(() => (article.value ? getPastel(article.value.id) : ''))
@@ -20,6 +20,14 @@ const nextArticle = computed(() => {
   const currentIndex = sorted.findIndex((a) => a.id === article.value!.id)
   if (currentIndex === -1 || currentIndex === sorted.length - 1) return null
   return sorted[currentIndex + 1]
+})
+
+const prevArticle = computed(() => {
+  if (!articles.value || !article.value) return null
+  const sorted = [...articles.value].sort((a, b) => a.id - b.id)
+  const currentIndex = sorted.findIndex((a) => a.id === article.value!.id)
+  if (currentIndex === -1 || currentIndex === 0) return null
+  return sorted[currentIndex - 1]
 })
 </script>
 
@@ -35,7 +43,12 @@ const nextArticle = computed(() => {
     <template v-else-if="article">
       <ArticleHeader :article="article" />
       <ArticleBody :article="article" />
-      <ArticleFooter :article="article" :pastel="pastel" :next-article="nextArticle" />
+      <ArticleFooter
+        :article="article"
+        :pastel="pastel"
+        :next-article="nextArticle"
+        :prev-article="prevArticle"
+      />
     </template>
   </article>
 </template>
